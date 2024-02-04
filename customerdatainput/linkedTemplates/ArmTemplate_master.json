@@ -1,0 +1,153 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "customerdatainput"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"Data_Processing_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'Data_Processing'"
+		},
+		"Landing_Zone_ADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Landing_Zone_ADLS'"
+		},
+		"for_trial_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'for_trial'"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "supermarketcustomerdatabase"
+		},
+		"Azure_Secrets_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://amazonkey.vault.azure.net/"
+		},
+		"Data_Processing_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0124-173346-7k1gqjb5"
+		},
+		"Final_Data_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "finaldata"
+		},
+		"Landing_Zone_ADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://supermarketdataingest.dfs.core.windows.net/"
+		},
+		"Order_Items_pull_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().baseURL}"
+		},
+		"for_trial_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://featureengineering01.dfs.core.windows.net/"
+		},
+		"s3_bucket_properties_typeProperties_accessKeyId": {
+			"type": "object",
+			"defaultValue": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "Azure_Secrets",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "amazonaccesskey"
+			}
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "customerdatainput_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"Data_Processing_accessToken": {
+						"value": "[parameters('Data_Processing_accessToken')]"
+					},
+					"Landing_Zone_ADLS_accountKey": {
+						"value": "[parameters('Landing_Zone_ADLS_accountKey')]"
+					},
+					"for_trial_accountKey": {
+						"value": "[parameters('for_trial_accountKey')]"
+					},
+					"Azure_Secrets_properties_typeProperties_baseUrl": {
+						"value": "[parameters('Azure_Secrets_properties_typeProperties_baseUrl')]"
+					},
+					"Data_Processing_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('Data_Processing_properties_typeProperties_existingClusterId')]"
+					},
+					"Landing_Zone_ADLS_properties_typeProperties_url": {
+						"value": "[parameters('Landing_Zone_ADLS_properties_typeProperties_url')]"
+					},
+					"Order_Items_pull_properties_typeProperties_url": {
+						"value": "[parameters('Order_Items_pull_properties_typeProperties_url')]"
+					},
+					"for_trial_properties_typeProperties_url": {
+						"value": "[parameters('for_trial_properties_typeProperties_url')]"
+					},
+					"AzureSqlDatabase1_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_connectionString_secretName')]"
+					},
+					"Final_Data_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('Final_Data_properties_typeProperties_connectionString_secretName')]"
+					},
+					"s3_bucket_properties_typeProperties_accessKeyId": {
+						"value": "[parameters('s3_bucket_properties_typeProperties_accessKeyId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "customerdatainput_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'customerdatainput_ArmTemplate_0')]"
+			]
+		}
+	]
+}

@@ -1,0 +1,52 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "customerdatainput"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"Data_Processing_accessToken": {
+			"value": ""
+		},
+		"Landing_Zone_ADLS_accountKey": {
+			"value": ""
+		},
+		"for_trial_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_properties_typeProperties_connectionString_secretName": {
+			"value": "supermarketcustomerdatabase"
+		},
+		"Azure_Secrets_properties_typeProperties_baseUrl": {
+			"value": "https://amazonkey.vault.azure.net/"
+		},
+		"Data_Processing_properties_typeProperties_existingClusterId": {
+			"value": "0124-173346-7k1gqjb5"
+		},
+		"Final_Data_properties_typeProperties_connectionString_secretName": {
+			"value": "finaldata"
+		},
+		"Landing_Zone_ADLS_properties_typeProperties_url": {
+			"value": "https://supermarketdataingest.dfs.core.windows.net/"
+		},
+		"Order_Items_pull_properties_typeProperties_url": {
+			"value": "@{linkedService().baseURL}"
+		},
+		"for_trial_properties_typeProperties_url": {
+			"value": "https://featureengineering01.dfs.core.windows.net/"
+		},
+		"s3_bucket_properties_typeProperties_accessKeyId": {
+			"value": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "Azure_Secrets",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "amazonaccesskey"
+			}
+		}
+	}
+}
